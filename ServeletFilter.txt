@@ -1,0 +1,73 @@
+import java.io.IOException;  
+import java.io.PrintWriter;  
+  
+import javax.servlet.*;  
+  
+public class MyFilter implements Filter{  
+  
+public void init(FilterConfig arg0) throws ServletException {}  
+      
+public void doFilter(ServletRequest req, ServletResponse resp,  
+    FilterChain chain) throws IOException, ServletException {  
+          
+    PrintWriter out=resp.getWriter();  
+    out.print("filter is invoked before");  
+          
+    chain.doFilter(req, resp);//sends request to next resource  
+          
+    out.print("filter is invoked after");  
+    }  
+    public void destroy() {}  
+}  
+
+
+
+
+HelloServlet.java
+import java.io.IOException;  
+import java.io.PrintWriter;  
+  
+import javax.servlet.ServletException;  
+import javax.servlet.http.*;  
+  
+public class HelloServlet extends HttpServlet {  
+    public void doGet(HttpServletRequest request, HttpServletResponse response)  
+            throws ServletException, IOException {  
+  
+        response.setContentType("text/html");  
+        PrintWriter out = response.getWriter();  
+      
+        out.print("<br>welcome to servlet<br>");  
+          
+    }  
+  
+}  
+
+
+
+web.xml
+For defining the filter, filter element of web-app must be defined just like servlet.
+<web-app>  
+  
+<servlet>  
+<servlet-name>s1</servlet-name>  
+<servlet-class>HelloServlet</servlet-class>  
+</servlet>  
+  
+<servlet-mapping>  
+<servlet-name>s1</servlet-name>  
+<url-pattern>/servlet1</url-pattern>  
+</servlet-mapping>  
+  
+<filter>  
+<filter-name>f1</filter-name>  
+<filter-class>MyFilter</filter-class>  
+</filter>  
+   
+<filter-mapping>  
+<filter-name>f1</filter-name>  
+<url-pattern>/servlet1</url-pattern>  
+</filter-mapping>  
+  
+  
+</web-app>  
